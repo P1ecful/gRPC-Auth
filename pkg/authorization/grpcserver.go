@@ -23,7 +23,6 @@ func (s *GRPCServer) Auth(ctx context.Context, req *api.UserMeta) (*api.Successf
 
 	hashedbymd5 := entity.GetMd5(req.GetLogin(), req.GetPassword())
 	newUser := db.User{UserHash: hashedbymd5}
-	newUser.Auth()
 
-	return &api.SuccessfulResponse{Status: "200 OK!"}, nil // server response
+	return &api.SuccessfulResponse{Status: newUser.Auth()}, nil // server response
 }
