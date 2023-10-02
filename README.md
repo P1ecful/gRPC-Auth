@@ -26,8 +26,8 @@ Below is an example of how you can install a project
    ```
 3. Go.mod
    ```sh
-   $ go mod init authorization
    $ go mod tidy
+   $ 
    ```
  4. Create database with name "usersmeta.db". And create the table:
        ```sh
