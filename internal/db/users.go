@@ -26,6 +26,10 @@ func (u User) Auth() string {
 	f := db.QueryRow("select * from Meta where userHash = $1", u.UserHash)
 	f.Scan(&dbMeta.UserHash)
 
-	return "Succesfull"
+	if dbMeta.UserHash == u.UserHash {
+		return "Succesfull"
+	}
+
+	return "Error, sorry"
 
 }
