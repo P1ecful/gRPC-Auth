@@ -3,10 +3,11 @@ package db
 import (
 	"database/sql"
 
-	_ "modernc.org/sqlite"
+	_ "github.com/lib/pq"
 )
 
-var db, _ = sql.Open("sqlite", "storage.db")
+var connStr = "user=p1ecful password=p1ecful dbname=Meta sslmode=disable"
+var db, _ = sql.Open("postgres", connStr)
 
 type User struct {
 	UserHash string
@@ -20,6 +21,7 @@ func (u User) Add() string {
 }
 
 func (u User) Auth() string {
+	var response string
 	dbMeta := User{}
 	defer db.Close()
 
@@ -27,9 +29,11 @@ func (u User) Auth() string {
 	f.Scan(&dbMeta.UserHash)
 
 	if dbMeta.UserHash == u.UserHash {
-		return "Succesfull"
+		response = "200 OK!"
+	} else {
+		response = "Error"
 	}
 
-	return "Error, sorry"
+	return response
 
 }

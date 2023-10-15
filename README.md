@@ -29,10 +29,10 @@ Below is an example of how you can install a project
    $ go mod tidy
    $ 
    ```
- 4. Create database with name "usersmeta.db". And create the table:
+ 4. Create PostgreSQL for project:
        ```sh
-      $ CREATE TABLE "Meta" (
-	   $   "userHash"	TEXT NOT NULL UNIQUE
+      $ CREATE TABLE Meta (
+	   $   userhash text unique
       $ );
       $
      ```
