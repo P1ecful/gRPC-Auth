@@ -6,34 +6,38 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var connStr = "user=p1ecful password=p1ecful dbname=Meta sslmode=disable"
+var connStr = "user=postgres password=p1ecful dbname=storage sslmode=disable"
 var db, _ = sql.Open("postgres", connStr)
 
 type User struct {
 	UserHash string
 }
 
-func (u User) Add() string {
-	db.Exec("insert into Meta (userHash) values ($1)", u.UserHash)
+func (u User) Register() string {
 	defer db.Close()
 
-	return "Succesfull"
+	if u.CheckIn() {
+		db.Exec("insert into meta (userHash) values ($1)", u.UserHash)
+		return "Пользователь уже зарегестрирован"
+	}
+
+	return "Успешно, вы зарегестрированы!"
 }
 
 func (u User) Auth() string {
-	var response string
+	if !u.CheckIn() {
+		return "Пользователь не найден"
+	}
+
+	return "Пользователь найден"
+}
+
+func (u User) CheckIn() bool {
 	dbMeta := User{}
 	defer db.Close()
 
 	f := db.QueryRow("select * from Meta where userHash = $1", u.UserHash)
 	f.Scan(&dbMeta.UserHash)
 
-	if dbMeta.UserHash == u.UserHash {
-		response = "200 OK!"
-	} else {
-		response = "Error"
-	}
-
-	return response
-
+	return dbMeta.UserHash == u.UserHash
 }
